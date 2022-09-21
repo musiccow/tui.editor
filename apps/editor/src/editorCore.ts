@@ -38,11 +38,13 @@ import { WwToDOMAdaptor } from './wysiwyg/adaptor/wwToDOMAdaptor';
 import { ScrollSync } from './markdown/scroll/scrollSync';
 import { addDefaultImageBlobHook } from './helper/image';
 import { setWidgetRules } from './widget/rules';
-import { cls, replaceBRWithEmptyBlock } from './utils/dom';
+import { cls, removeProseMirrorHackNodes, replaceBRWithEmptyBlock } from './utils/dom';
 import { sanitizeHTML } from './sanitizer/htmlSanitizer';
 import { createHTMLSchemaMap } from './wysiwyg/nodes/html';
 import { getHTMLRenderConvertors } from './markdown/htmlRenderConvertors';
 import { buildQuery } from './queries/queryManager';
+import { getEditorToMdPos, getMdToEditorPos } from './markdown/helper/pos';
+import { Pos } from '@t/toastmark';
 
 /**
  * ToastUIEditorCore
@@ -181,11 +183,12 @@ class ToastUIEditorCore {
 
     const linkAttributes = sanitizeLinkAttribute(this.options.linkAttributes);
 
-    this.pluginInfo = getPluginInfo(
-      this.options.plugins,
-      this.eventEmitter,
-      this.options.usageStatistics
-    );
+    this.pluginInfo = getPluginInfo({
+      plugins: this.options.plugins,
+      eventEmitter: this.eventEmitter,
+      usageStatistics: this.options.usageStatistics,
+      instance: this,
+    });
     const {
       toHTMLRenderers,
       toMarkdownRenderers,
@@ -503,7 +506,7 @@ class ToastUIEditorCore {
         this.wwEditor.setModel(wwNode!);
       }
     });
-    const html = this.wwEditor.view.dom.innerHTML;
+    const html = removeProseMirrorHackNodes(this.wwEditor.view.dom.innerHTML);
 
     if (this.placeholder) {
       const rePlaceholder = new RegExp(
@@ -819,6 +822,33 @@ class ToastUIEditorCore {
       mdPreview: this.preview.getElement(),
       wwEditor: this.wwEditor.getElement(),
     };
+  }
+
+  /**
+   * Convert position to match editor mode
+   * @param {number|Array.<number>} start - start position
+   * @param {number|Array.<number>} end - end position
+   * @param {string} mode - Editor mode name of want to match converted position to
+   */
+  convertPosToMatchEditorMode(start: EditorPos, end = start, mode = this.mode) {
+    const { doc } = this.mdEditor.view.state;
+    const isFromArray = Array.isArray(start);
+    const isToArray = Array.isArray(end);
+
+    let convertedFrom = start;
+    let convertedTo = end;
+
+    if (isFromArray !== isToArray) {
+      throw new Error('Types of arguments must be same');
+    }
+
+    if (mode === 'markdown' && !isFromArray && !isToArray) {
+      [convertedFrom, convertedTo] = getEditorToMdPos(doc, start as number, end as number);
+    } else if (mode === 'wysiwyg' && isFromArray && isToArray) {
+      [convertedFrom, convertedTo] = getMdToEditorPos(doc, start as Pos, end as Pos);
+    }
+
+    return [convertedFrom, convertedTo];
   }
 }
 
