@@ -50,15 +50,22 @@
         '>    3. [ ] Ember',
       ].join('\n');
 
+      const tablesString = [
+"| 1 | 2 | 3 |",
+"| --- | --- | --- |",
+"| a | b | c |",
+"| A | B | C |"
+].join('\n');
+
       const editor = new Editor({
         el: document.querySelector('#editor'),
         previewStyle: 'vertical',
-        height: '400px',
-        initialEditType: 'markdown',
+        height: '800px',
+        initialEditType: 'wysiwyg',
         useCommandShortcut: true,
         extendedAutolinks: true,
         frontMatter: true,
-        initialValue: content,
+        initialValue: tablesString,
       });
 
       window.editor = editor;

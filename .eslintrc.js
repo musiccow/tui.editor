@@ -59,5 +59,6 @@ module.exports = {
     'no-cond-assign': 0,
     'max-depth': ['error', 4],
     'no-return-assign': 0,
+    'prettier/prettier': ["warn",  {endOfLine: "auto"}],
   },
 };
