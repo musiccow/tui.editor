@@ -99,7 +99,6 @@ export function getResolvedSelection(selection: Selection | CellSelection) {
 }
 
 export function getTableContentFromSlice(slice: Slice) {
-  console.debug("getTableContentFromSlice")
   if (slice.size) {
     let { content, openStart, openEnd } = slice;
 

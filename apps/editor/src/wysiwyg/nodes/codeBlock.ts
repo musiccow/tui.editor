@@ -1,12 +1,13 @@
 import { ProsemirrorNode, DOMOutputSpec } from 'prosemirror-model';
 import { setBlockType, Command } from 'prosemirror-commands';
 
-import { addParagraph } from '@/helper/manipulation';
+import { addParagraph, createTextNode, createTextSelection } from '@/helper/manipulation';
 import { between, last } from '@/utils/common';
 import NodeSchema from '@/spec/node';
 import { getCustomAttrs, getDefaultCustomAttrs } from '@/wysiwyg/helper/node';
 
 import { EditorCommand } from '@t/spec';
+import { getRangeInfo } from '@/markdown/helper/pos';
 
 export class CodeBlock extends NodeSchema {
   get name() {
@@ -50,7 +51,24 @@ export class CodeBlock extends NodeSchema {
   }
 
   commands(): EditorCommand {
-    return () => (state, dispatch) => setBlockType(state.schema.nodes.codeBlock)(state, dispatch);
+    return () => (state, dispatch) => {
+      const { selection, schema, tr } = state;
+      const { from, to} = getRangeInfo(selection)
+      if (from !== to) {
+        const fragments = selection.content().content
+        console.log(getRangeInfo(selection))
+        const insertedText = fragments.content.map((node: Node) => {
+          return node.textContent
+        }).join("\n")
+        const fencedNode = createTextNode(schema, insertedText)
+        tr.replaceSelectionWith(fencedNode)
+        tr.setSelection(createTextSelection(tr, from, from + insertedText.length + 1))
+        dispatch!(tr)
+        state = state.apply(tr)
+      }
+
+      return setBlockType(state.schema.nodes.codeBlock)(state, dispatch)
+    };
   }
 
   moveCursor(direction: 'up' | 'down'): Command {

@@ -57,6 +57,8 @@
 "| A | B | C |"
 ].join('\n');
 
+      const codeBlock = "this is codeblock 1st line\n2nd line "
+
       const editor = new Editor({
         el: document.querySelector('#editor'),
         previewStyle: 'vertical',
@@ -65,7 +67,7 @@
         useCommandShortcut: true,
         extendedAutolinks: true,
         frontMatter: true,
-        initialValue: tablesString,
+        initialValue: codeBlock,
       });
 
       window.editor = editor;
