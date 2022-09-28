@@ -112,6 +112,7 @@ export class CodeBlockView implements NodeView {
   private bindDOMEvent() {
     if (this.dom) {
       this.dom.addEventListener('click', this.handleMousedown);
+      this.dom.addEventListener('paste', this.handlePasteInCodeBlock);
     }
   }
 
@@ -133,6 +134,16 @@ export class CodeBlockView implements NodeView {
 
       this.createLanguageEditor({ top, right });
     }
+  };
+
+  private handlePasteInCodeBlock = (ev: ClipboardEvent) => {
+    const paste = ev.clipboardData?.getData('text/plain') as string;
+    const selection = window.getSelection() as Selection;
+    if (!selection.rangeCount) return false;
+    selection.deleteFromDocument();
+    selection.getRangeAt(0).insertNode(document.createTextNode(paste));
+    ev.preventDefault();
+    ev.stopPropagation();
   };
 
   private handleKeydown = (ev: KeyboardEvent) => {

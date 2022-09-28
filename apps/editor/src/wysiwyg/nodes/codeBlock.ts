@@ -33,13 +33,13 @@ export class CodeBlock extends NodeSchema {
           getAttrs(dom: Node | string) {
             const rawHTML = (dom as HTMLElement).getAttribute('data-raw-html');
             const child = (dom as HTMLElement).firstElementChild;
-
             return {
               language: child?.getAttribute('data-language') || null,
               ...(rawHTML && { rawHTML }),
             };
           },
         },
+
       ],
       toDOM({ attrs }: ProsemirrorNode): DOMOutputSpec {
         return [
@@ -53,21 +53,21 @@ export class CodeBlock extends NodeSchema {
   commands(): EditorCommand {
     return () => (state, dispatch) => {
       const { selection, schema, tr } = state;
-      const { from, to} = getRangeInfo(selection)
+      const { from, to } = getRangeInfo(selection);
+
       if (from !== to) {
-        const fragments = selection.content().content
-        console.log(getRangeInfo(selection))
-        const insertedText = fragments.content.map((node: Node) => {
-          return node.textContent
-        }).join("\n")
-        const fencedNode = createTextNode(schema, insertedText)
-        tr.replaceSelectionWith(fencedNode)
-        tr.setSelection(createTextSelection(tr, from, from + insertedText.length + 1))
-        dispatch!(tr)
-        state = state.apply(tr)
+        const fragments = selection.content().content;
+
+        const insertedText = fragments.content.map((node: Node) => node.textContent).join("\n");
+        const fencedNode = createTextNode(schema, insertedText);
+
+        tr.replaceSelectionWith(fencedNode);
+        tr.setSelection(createTextSelection(tr, from, from + insertedText.length + 1));
+        dispatch!(tr);
+        state = state.apply(tr);
       }
 
-      return setBlockType(state.schema.nodes.codeBlock)(state, dispatch)
+      return setBlockType(state.schema.nodes.codeBlock)(state, dispatch);
     };
   }
 
