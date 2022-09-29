@@ -139,11 +139,14 @@ export class CodeBlockView implements NodeView {
   private handlePasteInCodeBlock = (ev: ClipboardEvent) => {
     const paste = ev.clipboardData?.getData('text/plain') as string;
     const selection = window.getSelection() as Selection;
+
     if (!selection.rangeCount) return false;
+
     selection.deleteFromDocument();
     selection.getRangeAt(0).insertNode(document.createTextNode(paste));
     ev.preventDefault();
     ev.stopPropagation();
+    return true
   };
 
   private handleKeydown = (ev: KeyboardEvent) => {

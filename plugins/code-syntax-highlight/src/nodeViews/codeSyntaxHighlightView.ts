@@ -94,6 +94,7 @@ class CodeSyntaxHighlightView implements NodeView {
   private bindDOMEvent() {
     if (this.dom) {
       this.dom.addEventListener('click', this.onClickEditingButton);
+      this.dom.addEventListener('paste', this.handlePasteInCodeBlock);
       this.view.dom.addEventListener('mousedown', this.finishLanguageEditing);
       window.addEventListener('resize', this.finishLanguageEditing);
     }
@@ -121,6 +122,19 @@ class CodeSyntaxHighlightView implements NodeView {
 
       this.openLanguageSelectBox(pos);
     }
+  };
+
+  private handlePasteInCodeBlock = (ev: ClipboardEvent) => {
+    const paste = ev.clipboardData?.getData('text/plain') as string;
+    const selection = window.getSelection() as Selection;
+
+    if (!selection.rangeCount) return false;
+
+    selection.deleteFromDocument();
+    selection.getRangeAt(0).insertNode(document.createTextNode(paste));
+    ev.preventDefault();
+    ev.stopPropagation();
+    return true
   };
 
   private openLanguageSelectBox(pos: CodeBlockPos) {
@@ -179,6 +193,7 @@ class CodeSyntaxHighlightView implements NodeView {
 
     if (this.dom) {
       this.dom.removeEventListener('click', this.onClickEditingButton);
+      this.dom.removeEventListener('paste', this.handlePasteInCodeBlock);
       this.view.dom.removeEventListener('mousedown', this.finishLanguageEditing);
       window.removeEventListener('resize', this.finishLanguageEditing);
     }

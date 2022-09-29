@@ -33,6 +33,7 @@ export class CodeBlock extends NodeSchema {
           getAttrs(dom: Node | string) {
             const rawHTML = (dom as HTMLElement).getAttribute('data-raw-html');
             const child = (dom as HTMLElement).firstElementChild;
+            
             return {
               language: child?.getAttribute('data-language') || null,
               ...(rawHTML && { rawHTML }),
