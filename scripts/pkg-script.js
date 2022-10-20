@@ -9,13 +9,13 @@ const optionDefinitions = [
 const options = commandLineArgs(optionDefinitions);
 
 const pkgMap = {
-  editor: '@toast-ui/editor',
+  editor: '@chaojun.wei/editor',
   react: '@toast-ui/react-editor',
   vue: '@toast-ui/vue-editor',
   toastmark: '@toast-ui/toastmark',
   chart: '@toast-ui/editor-plugin-chart',
   color: '@toast-ui/editor-plugin-color-syntax',
-  code: '@toast-ui/editor-plugin-code-syntax-highlight',
+  code: '@chaojun.wei/editor-plugin-code-syntax-highlight',
   table: '@toast-ui/editor-plugin-table-merged-cell',
   uml: '@toast-ui/editor-plugin-uml',
 };
