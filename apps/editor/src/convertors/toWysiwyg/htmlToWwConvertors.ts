@@ -190,15 +190,11 @@ const convertors: HTMLToWwConvertorMap = {
       // if (next && (isInlineNode(next) || isCustomHTMLInlineNode(state, next))) {
       //   state.openNode(paragraph);
       // }
-
-      if (prev) {
-        state.closeNode();
-      }
-
-      if (next) {
-        state.openNode(paragraph);
-      }
       
+      if(!prev) state.openNode(paragraph);
+      state.closeNode();
+      state.openNode(paragraph);
+      if(!next) state.closeNode();
     }
   },
 
