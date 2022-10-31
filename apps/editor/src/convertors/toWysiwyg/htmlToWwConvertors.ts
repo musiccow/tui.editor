@@ -183,13 +183,22 @@ const convertors: HTMLToWwConvertorMap = {
         state.openNode(paragraph);
       }
     } else if (parent?.type === 'tableCell') {
-      if (prev && (isInlineNode(prev) || isCustomHTMLInlineNode(state, prev))) {
+      // if (prev && (isInlineNode(prev) || isCustomHTMLInlineNode(state, prev))) {
+      //   state.closeNode();
+      // }
+
+      // if (next && (isInlineNode(next) || isCustomHTMLInlineNode(state, next))) {
+      //   state.openNode(paragraph);
+      // }
+
+      if (prev) {
         state.closeNode();
       }
 
-      if (next && (isInlineNode(next) || isCustomHTMLInlineNode(state, next))) {
+      if (next) {
         state.openNode(paragraph);
       }
+      
     }
   },
 
