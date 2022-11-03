@@ -51,10 +51,10 @@
       ].join('\n');
 
       const tablesString = [
-"| 1 | 2 | 3 |",
-"| --- | --- | --- |",
-"| a | b | c |",
-"| A | B | C |"
+"| Objective: | Link Capacity 1 CS5 2 chpid/link 16 CPUs 8 ICFs |",
+"| ---------- | ----------------------------------------------- |",
+"| Thrasher Job: | WORKLOAD.ACME.SOFPDS(ACMALLA1) |",
+"| Thrasher Rate: | /RUNWKLD 4 1 zA\_GA15\_ShrICF\_Sc1\_CS5\_DED\_R25L0243\_4ACMER1 ACMALLA1<br><br>/RUNWKLD 4 100 zA\_GA15\_ShrICF\_Sc1\_CS5\_DED\_R25L0243\_4ACMER100 ACMALLA1<br>/RUNWKLD 4 500 zA\_GA15\_ShrICF\_Sc1\_CS5\_DED\_R25L0243\_4ACMER500 ACMALLA1 |"
 ].join('\n');
 
       const codeBlock = "this is codeblock 1st line\n2nd line "
@@ -67,7 +67,7 @@
         useCommandShortcut: true,
         extendedAutolinks: true,
         frontMatter: true,
-        initialValue: "",
+        initialValue: tablesString,
       });
 
       window.editor = editor;
