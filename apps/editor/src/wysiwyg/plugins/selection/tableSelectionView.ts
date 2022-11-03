@@ -69,7 +69,7 @@ export default class TableSelection {
 
     if (prevEndCellOffset) {
       prevEndCellPos = this.view.state.doc.resolve(prevEndCellOffset);
-    } else if (startCellPos !== endCellPos) {
+    } else if (startCellPos?.pos !== endCellPos?.pos) {
       prevEndCellPos = startCellPos;
     }
 
