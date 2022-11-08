@@ -31,6 +31,10 @@ import { widgetNodeView } from '@/widget/widgetNode';
 import { cls, removeProseMirrorHackNodes } from '@/utils/dom';
 import { includes } from '@/utils/common';
 import { isInTableNode } from '@/wysiwyg/helper/node';
+import { changeCopied } from './clipboard/copy';
+import CellSelection from './plugins/selection/cellSelection';
+import { TextSelection } from 'prosemirror-state';
+import { pluginKey } from './plugins/selection/tableSelectionView';
 
 interface WindowWithClipboard extends Window {
   clipboardData?: DataTransfer | null;
@@ -158,6 +162,7 @@ export default class WysiwygEditor extends EditorBase {
         this.emitChangeEvent(tr.scrollIntoView());
         this.eventEmitter.emit('setFocusedNode', state.selection.$from.node(1));
       },
+      // clipboardSerializer: changeCopied(this.schema),
       transformPastedHTML: changePastedHTML,
       transformPasted: (slice: Slice) =>
         changePastedSlice(slice, this.schema, isInTableNode(this.view.state.selection.$from)),
@@ -167,6 +172,22 @@ export default class WysiwygEditor extends EditorBase {
         return false;
       },
       handleDOMEvents: {
+        // hack copy event to prevent copy tabel cell centent as a table.
+        copy: (view, ev) => {
+          let isCellContent = false
+
+          for(const element of ev.path) {
+            if (element instanceof HTMLElement &&
+              element.tagName === 'TD' &&
+              !element.getAttribute('class')?.includes('cell')
+            ) {
+              isCellContent = true;
+              break;
+            }
+          }
+
+          return isCellContent;
+        },
         paste: (_, ev) => {
           const clipboardData =
             (ev as ClipboardEvent).clipboardData || (window as WindowWithClipboard).clipboardData;
