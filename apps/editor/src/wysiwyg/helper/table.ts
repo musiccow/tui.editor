@@ -85,8 +85,10 @@ export function getResolvedSelection(selection: Selection | CellSelection) {
   if (selection instanceof TextSelection) {
     const { $anchor } = selection;
     const foundCell = findCell($anchor);
+    
     if (foundCell) {
       const anchor = $anchor.node(0).resolve($anchor.before(foundCell.depth));
+      
       return { anchor, head: anchor };
     }
   }
