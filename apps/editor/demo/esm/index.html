@@ -3,13 +3,9 @@
   <head lang="en">
     <meta charset="UTF-8" />
     <title>Demo</title>
-  </head>
-  <body>
-    <div id="editor"></div>
-    <!-- Editor -->
     <script type="module">
       import { Editor } from '/dist/index.js';
-
+  
       const content = [
         '![image](https://uicdn.toast.com/toastui/img/tui-editor-bi.png)',
         '',
@@ -49,16 +45,16 @@
         '>    2. [x] Vue',
         '>    3. [ ] Ember',
       ].join('\n');
-
+  
       const tablesString = [
-"| Objective: | Link Capacity 1 CS5 2 chpid/link 16 CPUs 8 ICFs |",
-"| ---------- | ----------------------------------------------- |",
-"| Thrasher Job: | WORKLOAD.ACME.SOFPDS(ACMALLA1) |",
-"| Thrasher Rate: | /RUNWKLD 4 1 zA\_GA15\_ShrICF\_Sc1\_CS5\_DED\_R25L0243\_4ACMER1 ACMALLA1<br><br>/RUNWKLD 4 100 zA\_GA15\_ShrICF\_Sc1\_CS5\_DED\_R25L0243\_4ACMER100 ACMALLA1<br>/RUNWKLD 4 500 `zA\_GA15\_ShrICF\_Sc1\_CS5\_DED\_R25L0243\_4ACMER500 ACMALLA1` |"
-].join('\n');
-
+  "| Objective: | Link Capacity 1 CS5 2 chpid/link 16 CPUs 8 ICFs |",
+  "| ---------- | ----------------------------------------------- |",
+  "| Thrasher Job: | WORKLOAD.ACME.SOFPDS(ACMALLA1) |",
+  "| Thrasher Rate: | /RUNWKLD 4 1 zA\_GA15\_ShrICF\_Sc1\_CS5\_DED\_R25L0243\_4ACMER1 ACMALLA1<br><br>/RUNWKLD 4 100 zA\_GA15\_ShrICF\_Sc1\_CS5\_DED\_R25L0243\_4ACMER100 ACMALLA1<br>/RUNWKLD 4 500 `zA\_GA15\_ShrICF\_Sc1\_CS5\_DED\_R25L0243\_4ACMER500 ACMALLA1` |"
+  ].join('\n');
+  
       const codeBlock = "this is codeblock 1st line\n2nd line "
-
+  
       const editor = new Editor({
         el: document.querySelector('#editor'),
         previewStyle: 'vertical',
@@ -69,8 +65,21 @@
         frontMatter: true,
         initialValue: tablesString,
       });
-
+  
       window.editor = editor;
+      window.myFunction = function(){
+        console.log(window.editor.getEditorView().state.history$.done.eventCount);
+        //document.getElementById("demo").innerHTML="Hello World";
+      }
     </script>
+  </head>
+
+  <body>
+
+
+    <button onclick="window.myFunction()">action</button>
+    <div id="editor"></div>
+    <p id="demo"></p>
+    <!-- Editor -->
   </body>
 </html>
