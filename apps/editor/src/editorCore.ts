@@ -521,6 +521,17 @@ class ToastUIEditorCore {
   }
 
   /**
+   * Get Editor View 
+   * @returns {EditorView} 
+   */
+  getEditorView() {
+    const { view } = this.mode === 'markdown' ? this.mdEditor : this.wwEditor;
+    
+    return view;
+  }
+
+
+  /**
    * Insert text
    * @param {string} text - text content
    */
