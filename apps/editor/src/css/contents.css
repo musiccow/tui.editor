@@ -191,7 +191,8 @@ table.ProseMirror-selectednode {
 }
 
 .toastui-editor-contents table {
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  /* border: 1px solid rgba(0, 0, 0, 0.1); */
+  border: 1px solid #BBB;
   margin: 12px 0 14px;
   color: #222;
   width: auto;
@@ -201,10 +202,18 @@ table.ProseMirror-selectednode {
 
 .toastui-editor-contents table th,
 .toastui-editor-contents table td {
-  border: 1px solid rgba(0, 0, 0, 0.1);
   padding: 5px 14px 5px 12px;
   height: 32px;
 }
+
+.toastui-editor-contents table th {
+  border: 1px solid #666;
+}
+.toastui-editor-contents table td {
+  border: 1px solid #BBB;
+}
+
+
 
 .toastui-editor-contents table th {
   background-color: #555;
