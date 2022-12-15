@@ -1,85 +1,113 @@
 <!DOCTYPE html>
 <html>
-  <head lang="en">
-    <meta charset="UTF-8" />
-    <title>Demo</title>
-    <script type="module">
-      import { Editor } from '/dist/index.js';
-  
-      const content = [
-        '![image](https://uicdn.toast.com/toastui/img/tui-editor-bi.png)',
-        '',
-        '# Awesome Editor!',
-        '',
-        'It has been _released as opensource in 2018_ and has ~~continually~~ evolved to **receive 10k GitHub ⭐️ Stars**.',
-        '',
-        '## Create Instance',
-        '',
-        'You can create an instance with the following code and use `getHtml()` and `getMarkdown()` of the [Editor](https://github.com/nhn/tui.editor).',
-        '',
-        '```js',
-        'const editor = new Editor(options);',
-        '```',
-        '',
-        '> See the table below for default options',
-        '> > More API information can be found in the document',
-        '',
-        '| name | type | description |',
-        '| --- | --- | --- |',
-        '| el | `HTMLElement` | container element |',
-        '',
-        '## Features',
-        '',
-        '* CommonMark + GFM Specifications',
-        '   * Live Preview',
-        '   * Scroll Sync',
-        '   * Auto Indent',
-        '   * Syntax Highlight',
-        '        1. Markdown',
-        '        2. Preview',
-        '',
-        '## Support Wrappers',
-        '',
-        '> * Wrappers',
-        '>    1. [x] React',
-        '>    2. [x] Vue',
-        '>    3. [ ] Ember',
-      ].join('\n');
-  
-      const tablesString = [
-  "| Objective: | Link Capacity 1 CS5 2 chpid/link 16 CPUs 8 ICFs |",
-  "| ---------- | ----------------------------------------------- |",
-  "| Thrasher Job: | WORKLOAD.ACME.SOFPDS(ACMALLA1) |",
-  "| Thrasher Rate: | /RUNWKLD 4 1 zA\_GA15\_ShrICF\_Sc1\_CS5\_DED\_R25L0243\_4ACMER1 ACMALLA1<br><br>/RUNWKLD 4 100 zA\_GA15\_ShrICF\_Sc1\_CS5\_DED\_R25L0243\_4ACMER100 ACMALLA1<br>/RUNWKLD 4 500 `zA\_GA15\_ShrICF\_Sc1\_CS5\_DED\_R25L0243\_4ACMER500 ACMALLA1` |"
-  ].join('\n');
-  
-      const codeBlock = "this is codeblock 1st line\n2nd line "
-  
-      const editor = new Editor({
-        el: document.querySelector('#editor'),
-        previewStyle: 'vertical',
-        height: '800px',
-        initialEditType: 'wysiwyg',
-        useCommandShortcut: true,
-        extendedAutolinks: true,
-        frontMatter: true,
-        initialValue: tablesString,
-      });
-  
-      window.editor = editor;
-      window.myFunction = function(){
-        console.log(window.editor.getEditorView().state.history$.done.eventCount);
-        //document.getElementById("demo").innerHTML="Hello World";
+
+<head lang="en">
+  <meta charset="UTF-8" />
+  <title>Demo</title>
+  <script type="module">
+    import { Editor } from '/dist/index.js';
+
+    const content = [
+      '![image](https://uicdn.toast.com/toastui/img/tui-editor-bi.png)',
+      '',
+      '# Awesome Editor!',
+      '',
+      'It has been _released as opensource in 2018_ and has ~~continually~~ evolved to **receive 10k GitHub ⭐️ Stars**.',
+      '',
+      '## Create Instance',
+      '',
+      'You can create an instance with the following code and use `getHtml()` and `getMarkdown()` of the [Editor](https://github.com/nhn/tui.editor).',
+      '',
+      '```js',
+      'const editor = new Editor(options);',
+      '```',
+      '',
+      '> See the table below for default options',
+      '> > More API information can be found in the document',
+      '',
+      '| name | type | description |',
+      '| --- | --- | --- |',
+      '| el | `HTMLElement` | container element |',
+      '',
+      '## Features',
+      '',
+      '* CommonMark + GFM Specifications',
+      '   * Live Preview',
+      '   * Scroll Sync',
+      '   * Auto Indent',
+      '   * Syntax Highlight',
+      '        1. Markdown',
+      '        2. Preview',
+      '',
+      '## Support Wrappers',
+      '',
+      '> * Wrappers',
+      '>    1. [x] React',
+      '>    2. [x] Vue',
+      '>    3. [ ] Ember',
+    ].join('\n');
+
+    const tablesString = [
+      "| Objective: | Link Capacity 1 CS5 2 chpid/link 16 CPUs 8 ICFs |",
+      "| ---------- | ----------------------------------------------- |",
+      "| Thrasher Job: | WORKLOAD.ACME.SOFPDS(ACMALLA1) |",
+      "| Thrasher Rate: | /RUNWKLD 4 1 zA\_GA15\_ShrICF\_Sc1\_CS5\_DED\_R25L0243\_4ACMER1 ACMALLA1<br><br>/RUNWKLD 4 100 zA\_GA15\_ShrICF\_Sc1\_CS5\_DED\_R25L0243\_4ACMER100 ACMALLA1<br>/RUNWKLD 4 500 `zA\_GA15\_ShrICF\_Sc1\_CS5\_DED\_R25L0243\_4ACMER500 ACMALLA1` |"
+    ].join('\n');
+
+    const codeBlock = "this is codeblock 1st line\n2nd line "
+
+    const editor = new Editor({
+      el: document.querySelector('#editor'),
+      previewStyle: 'vertical',
+      height: '800px',
+      initialEditType: 'wysiwyg',
+      useCommandShortcut: true,
+      extendedAutolinks: true,
+      frontMatter: true,
+      initialValue: tablesString,
+    });
+
+    window.editor = editor;
+    window.myFunction = async function () {
+      //console.log(window.editor.getEditorView().state.history$.done.eventCount);
+      //document.getElementById("demo").innerHTML="Hello World";
+      //const viewer = Editor.factory({
+      //  el: document.querySelector('#viewer'),
+      //  viewer: true,
+      //  initialValue: tablesString
+      // });
+      const view = window.editor.getEditorView()
+      //console.log(editor.toastMark.lineTexts)
+      // console.log(view.state.selection)
+      //console.log(editor.getEditorElements().mdEditor)
+      /*
+      const clipboardContents = await navigator.clipboard.read();
+      for (const item of clipboardContents) {
+        if (item.types.includes("text/html")) {
+          const blob = await item.getType('text/html');
+          const html = await blob.text();
+          console.log(html)
+          const viewer = Editor.factory({
+            el: document.querySelector('#viewer'),
+            viewer: true,
+            initialValue: html
+          });
+        }
       }
-    </script>
-  </head>
+      */
+      console.log(window.getSelection().toString())
+      
+    }
+  </script>
+</head>
 
-  <body>
+<body>
 
 
-    <button onclick="window.myFunction()">action</button>
-    <div id="editor"></div>
-    <p id="demo"></p>
-    <!-- Editor -->
-  </body>
+  <button onclick="window.myFunction()">action</button>
+  <div id="editor"></div>
+  <div id="viewer"></div>
+  <!-- Editor -->
+</body>
+
 </html>
