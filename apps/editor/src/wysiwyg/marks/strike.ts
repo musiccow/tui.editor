@@ -12,7 +12,7 @@ export class Strike extends Mark {
   }
 
   get schema() {
-    const parseDOM = ['s', 'del'].map((tag) => {
+    const parseDOM = ['s', 'strike', 'del'].map((tag) => {
       return {
         tag,
         getAttrs(dom: Node | string) {

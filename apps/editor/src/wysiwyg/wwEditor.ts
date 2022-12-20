@@ -162,7 +162,7 @@ export default class WysiwygEditor extends EditorBase {
         this.emitChangeEvent(tr.scrollIntoView());
         this.eventEmitter.emit('setFocusedNode', state.selection.$from.node(1));
       },
-      // clipboardSerializer: changeCopied(this.schema),
+      clipboardSerializer: changeCopied(this.schema),
       transformPastedHTML: changePastedHTML,
       transformPasted: (slice: Slice) =>
         changePastedSlice(slice, this.schema, isInTableNode(this.view.state.selection.$from)),
@@ -174,7 +174,7 @@ export default class WysiwygEditor extends EditorBase {
       handleDOMEvents: {
         // hack copy event to prevent copy tabel cell centent as a table.
         copy: (view, ev) => {
-          let isCellContent = false
+          let isCellContent = false;
 
           for(const element of ev.path) {
             if (element instanceof HTMLElement &&
