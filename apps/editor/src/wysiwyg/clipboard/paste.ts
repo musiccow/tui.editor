@@ -163,6 +163,7 @@ function createTableFromPastingTable(
 export function changePastedSlice(slice: Slice, schema: Schema, isInTable: boolean) {
   const nodes: Node[] = [];
   const { content, openStart, openEnd } = slice;
+  
   content.forEach((node) => {
     nodes.push(node);
   });

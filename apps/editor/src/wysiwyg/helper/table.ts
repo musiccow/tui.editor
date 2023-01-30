@@ -100,7 +100,7 @@ export function getResolvedSelection(selection: Selection | CellSelection) {
 
 export function getTableContentFromSlice(slice: Slice) {
   if (slice.size) {
-    let { content } = slice;
+    const { content } = slice;
 
     if (
       content.firstChild!.type.name === 'tableHead' ||
