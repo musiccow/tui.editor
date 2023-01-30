@@ -83,7 +83,6 @@ function getHeadingAttrs(level: number) {
 }
 
 function listItem({ attrs }: ProsemirrorNode) {
-  console.log('change');
   const { task, checked } = attrs;
 
   if (!task) {

@@ -165,7 +165,7 @@ export default class WysiwygEditor extends EditorBase {
       clipboardSerializer: changeCopied(this.schema),
       transformPastedHTML: changePastedHTML,
       transformPasted: (slice: Slice) =>
-        changePastedSlice(slice, this.schema, isInTableNode(this.view.state.selection.$from)),
+         changePastedSlice(slice, this.schema, isInTableNode(this.view.state.selection.$from)),
       handlePaste: (view: EditorView, _: ClipboardEvent, slice: Slice) => pasteToTable(view, slice),
       handleKeyDown: (_, ev) => {
         this.eventEmitter.emit('keydown', this.editorType, ev);
@@ -173,21 +173,6 @@ export default class WysiwygEditor extends EditorBase {
       },
       handleDOMEvents: {
         // hack copy event to prevent copy tabel cell centent as a table.
-        copy: (view, ev) => {
-          let isCellContent = false;
-
-          for(const element of ev.path) {
-            if (element instanceof HTMLElement &&
-              element.tagName === 'TD' &&
-              !element.getAttribute('class')?.includes('cell')
-            ) {
-              isCellContent = true;
-              break;
-            }
-          }
-
-          return isCellContent;
-        },
         paste: (_, ev) => {
           const clipboardData =
             (ev as ClipboardEvent).clipboardData || (window as WindowWithClipboard).clipboardData;

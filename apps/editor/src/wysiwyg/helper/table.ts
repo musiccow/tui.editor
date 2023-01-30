@@ -85,10 +85,10 @@ export function getResolvedSelection(selection: Selection | CellSelection) {
   if (selection instanceof TextSelection) {
     const { $anchor } = selection;
     const foundCell = findCell($anchor);
-    
+
     if (foundCell) {
       const anchor = $anchor.node(0).resolve($anchor.before(foundCell.depth));
-      
+
       return { anchor, head: anchor };
     }
   }
@@ -100,20 +100,7 @@ export function getResolvedSelection(selection: Selection | CellSelection) {
 
 export function getTableContentFromSlice(slice: Slice) {
   if (slice.size) {
-    let { content, openStart, openEnd } = slice;
-
-    if (content.childCount !== 1) {
-      return null;
-    }
-
-    while (
-      content.childCount === 1 && ((openStart > 0 && openEnd > 0) || content.firstChild?.type.name === 'table')
-      // content.childCount === 1 && content.firstChild?.type.name === 'table'
-    ) {
-      openStart -= 1;
-      openEnd -= 1;
-      content = content.firstChild!.content;
-    }
+    let { content } = slice;
 
     if (
       content.firstChild!.type.name === 'tableHead' ||
@@ -121,6 +108,8 @@ export function getTableContentFromSlice(slice: Slice) {
     ) {
       return content;
     }
+
+    return null;
   }
 
   return null;

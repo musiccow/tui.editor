@@ -224,11 +224,11 @@ function replaceCells(
 export function pasteToTable(view: EditorView, slice: Slice) {
   const { selection, schema, tr } = view.state;
   const { anchor, head } = getResolvedSelection(selection);
-
+  
   if (anchor && head) {
     const tableContent = getTableContentFromSlice(slice);
 
-    if (!tableContent) {
+    if (tableContent === null) {
       return false;
     }
 

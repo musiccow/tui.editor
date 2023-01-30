@@ -163,21 +163,8 @@ function createTableFromPastingTable(
 export function changePastedSlice(slice: Slice, schema: Schema, isInTable: boolean) {
   const nodes: Node[] = [];
   const { content, openStart, openEnd } = slice;
-
   content.forEach((node) => {
-    if (node.type.name === 'table') {
-      const tableContent = getTableContentFromSlice(new Slice(Fragment.from(node), 0, 0));
-
-      if (tableContent) {
-        const rows = createRowsFromPastingTable(tableContent);
-        const startFromBody = tableContent.firstChild!.type.name === 'tableBody';
-        const table = createTableFromPastingTable(rows, schema, startFromBody, isInTable);
-
-        nodes.push(table);
-      }
-    } else {
-      nodes.push(node);
-    }
+    nodes.push(node);
   });
 
   return new Slice(Fragment.from(nodes), openStart, openEnd);
