@@ -172,21 +172,15 @@ export default class WysiwygEditor extends EditorBase {
         return false;
       },
       handleDOMEvents: {
-        // hack copy event to prevent copy tabel cell centent as a table.
         copy: (view, ev) => {
-          let isCellContent = false;
+          const { state } = view;
+          const isCellSelection = state.selection instanceof CellSelection;
+          const isInTable = isInTableNode(state.selection.$from)
+          /*  escape table only when tabel cell content is selected */
 
-          for(const element of ev.path) {
-            if (element instanceof HTMLElement &&
-              element.tagName === 'TD' &&
-              !element.getAttribute('class')?.includes('cell')
-            ) {
-              isCellContent = true;
-              break;
-            }
-          }
+          if (isInTable && !isCellSelection) return true
 
-          return isCellContent;
+          return false
         },
         paste: (_, ev) => {
           const clipboardData =
