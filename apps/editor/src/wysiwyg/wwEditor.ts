@@ -173,14 +173,26 @@ export default class WysiwygEditor extends EditorBase {
       },
       handleDOMEvents: {
         copy: (view, ev) => {
+          /**
+           * this function handle copied content, default return false(parsing DOM)
+           * If return true, will copy rendered html instead parsing DOM.
+           * If return false, will parse DOM instead of copy rendered html 
+           * When select table cells content (Selection is NOT CellSelection), must return true(raw)
+           * Else must return true to let it escape a <table> wrapper
+           * 
+           * Firefox doesn't support copy html with styles, always return false(parse DOM) to get styles
+           * especially table
+           * code-syntax-highlight will be a problem because it can not get style when parsing DOM
+           */
+
           const { state } = view;
           const isCellSelection = state.selection instanceof CellSelection;
           const isInTable = isInTableNode(state.selection.$from)
-          /*  escape table only when tabel cell content is selected */
 
-          if (isInTable && !isCellSelection) return true
+          if (isInTable && !isCellSelection) return true /* Exception: Firefox can not get styled cell content */
 
           return false
+
         },
         paste: (_, ev) => {
           const clipboardData =

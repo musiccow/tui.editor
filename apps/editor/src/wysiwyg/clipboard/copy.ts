@@ -5,11 +5,12 @@ export function changeCopied(schema: Schema) {
   const clipboardSerializer = new DOMSerializer(
     Object.assign({}, base.nodes, {
       // table,
-      paragraph,
+
       tableHeadCell,
       tableBodyCell,
       codeBlock,
       blockQuote,
+      paragraph,
       // listItem,
       // heading,
     }),
@@ -30,7 +31,7 @@ function table(node: ProsemirrorNode) {
 
 function tableHeadCell(node: ProsemirrorNode) {
   const style =
-    'background-color: #555;   font-weight: 300; color: #fff; padding: 5px 14px 5px 12px; height: 32px; border: 1px solid #666;';
+    'background-color: #555; font-weight: 300; color: #fff; padding: 5px 14px 5px 12px; height: 32px; border: 1px solid #666;';
 
   return ['th', { style }, 0];
 }
@@ -67,7 +68,7 @@ function strike(node: ProsemirrorNode) {
 function paragraph(node: ProsemirrorNode) {
   const style = 'margin: 2px 0;';
 
-  return ['p', {}, 0];
+  return ['p', {style}, 0];
 }
 
 function heading({ attrs }: ProsemirrorNode) {

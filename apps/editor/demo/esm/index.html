@@ -6,19 +6,8 @@
   <title>Demo</title>
   <script type="module">
     import { Editor } from '/dist/index.js';
-    const setClipboard = async (text, format = "text/plain") => {
-      return new Promise((resolve, reject) => {
-        const blob = new Blob([text], { type });
-        const data = [new ClipboardItem({ [type]: blob })];
-        navigator.clipboard.write(data).then(
-          () => {
-            resolve("success")
-          }
-        ).catch(e => {
-          reject(e)
-        });
-      })
-    }
+
+
     const content = [
       '![image](https://uicdn.toast.com/toastui/img/tui-editor-bi.png)',
       '',
