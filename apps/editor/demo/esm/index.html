@@ -88,31 +88,61 @@
     })
     */
     window.editor = editor;
-    window.myFunction = async function () {
-      //console.log(window.editor.getEditorView().state.history$.done.eventCount);
-      //document.getElementById("demo").innerHTML="Hello World";
-      //const viewer = Editor.factory({
-      //  el: document.querySelector('#viewer'),
-      //  viewer: true,
-      //  initialValue: tablesString
-      // });
-      const view = window.editor.getEditorView()
-      //console.log(editor.toastMark.lineTexts)
-      // console.log(view.state.selection)
-      //console.log(editor.getEditorElements().mdEditor)
+    window.myFunction = function () {
+      let selection = window.getSelection();
+      let elements = document.querySelectorAll("table,td,th,code,pre,h1,h2");
+      console.log(elements)
+      for (let i = 0; i < elements.length; i++) {
+        let computedStyles = window.getComputedStyle(elements[i]);
 
-      const clipboardContents = await navigator.clipboard.read();
-      for (const item of clipboardContents) {
-        if (item.types.includes("text/html")) {
-          const blob = await item.getType('text/html');
-          const html = await blob.text();
-          console.log(html)
+        for (let j = 0; j < computedStyles.length; j++) {
+          let property = computedStyles[j];
+          let value = computedStyles.getPropertyValue(property);
 
+          elements[i].style[property] = value;
         }
       }
 
-      console.log(window.getSelection().toString())
+      //const editorEl = document.querySelector(".ProseMirror.toastui-editor-contents")
+      // editorEl.focus();
+      // document.execCommand("selectAll");
+      // editorEl.focus();
+      let bool = document.execCommand("copy");
 
+
+      if (false) {
+        let editorCElementSelector = "";
+        let range = document.createRange();
+        editorCElementSelector = ".ProseMirror.toastui-editor-contents"
+        //editorCElementSelector = ".ww-mode"
+
+        const editorContentNode = document.querySelector(editorCElementSelector);
+        console.log("editorContentNode:", editorContentNode)
+        if (editorContentNode) {
+          //editorContentNode.insertBefore(runlogHTMLNode, editorContentNode.children[0]);
+
+          selection.removeAllRanges();
+          //console.log(selection)
+          range.selectNodeContents(editorContentNode);
+          // range.insertNode(runlogHTMLNode)
+          selection.addRange(range);
+          console.log("selection:", selection)
+          let bool = document.execCommand("copy");
+          document.execCommand("unselect");
+          // editorContentNode.parentNode?.removeChild(runlogHTMLNode);
+          if (bool) {
+            alert("Copied!");
+            //let myEvent = new Event("copy");
+            //document.dispatchEvent(myEvent);
+          }
+          else {
+            alert("Faile to copy!");
+          }
+        }
+        else {
+          alert(`Can not find editor Node: ${editorCElementSelector}`)
+        }
+      }
     }
   </script>
 </head>
@@ -122,7 +152,6 @@
 
   <button onclick="window.myFunction()">action</button>
   <div id="editor"></div>
-  <div id="viewer"></div>
   <!-- Editor -->
 </body>
 

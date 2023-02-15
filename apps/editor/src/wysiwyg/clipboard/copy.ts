@@ -5,7 +5,6 @@ export function changeCopied(schema: Schema) {
   const clipboardSerializer = new DOMSerializer(
     Object.assign({}, base.nodes, {
       // table,
-
       tableHeadCell,
       tableBodyCell,
       codeBlock,
@@ -31,13 +30,13 @@ function table(node: ProsemirrorNode) {
 
 function tableHeadCell(node: ProsemirrorNode) {
   const style =
-    'background-color: #555; font-weight: 300; color: #fff; padding: 5px 14px 5px 12px; height: 32px; border: 1px solid #666;';
+    'border-collapse: collapse;background-color: #555; font-weight: 300; color: #fff; padding: 5px 14px 5px 12px; height: 32px; border: 1px solid #666;';
 
   return ['th', { style }, 0];
 }
 
 function tableBodyCell(node: ProsemirrorNode) {
-  const style = 'padding: 5px 14px 5px 12px; height: 32px; border: 1px solid #BBB;';
+  const style = 'border-collapse: collapse; padding: 5px 14px 5px 12px; height: 32px; border: 1px solid #BBB;';
 
   return ['td', { style }, 0];
 }
@@ -46,7 +45,7 @@ function code(node: ProsemirrorNode) {
   const style =
     'color: #c1798b;background-color: #f9f2f4;padding: 2px 3px;letter-spacing: -0.3px;border-radius: 2px;';
 
-  return ['code', { style }, 0];
+  return ['code', { style }, ['span', {}]];
 }
 
 function codeBlock({ attrs }: ProsemirrorNode) {
@@ -68,7 +67,7 @@ function strike(node: ProsemirrorNode) {
 function paragraph(node: ProsemirrorNode) {
   const style = 'margin: 2px 0;';
 
-  return ['p', {style}, 0];
+  return ['p', { style }, 0];
 }
 
 function heading({ attrs }: ProsemirrorNode) {
@@ -84,7 +83,6 @@ function getHeadingAttrs(level: number) {
 }
 
 function listItem({ attrs }: ProsemirrorNode) {
-  console.log('change');
   const { task, checked } = attrs;
 
   if (!task) {

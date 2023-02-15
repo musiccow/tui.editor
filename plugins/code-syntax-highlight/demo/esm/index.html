@@ -1,63 +1,93 @@
 <!DOCTYPE html>
 <html>
-  <head lang="en">
-    <meta charset="UTF-8" />
-    <title>Test to use plugin in node environment</title>
-    <!-- Plugin -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css"
-    />
-  </head>
-  <body>
-    <div id="editor"></div>
-    <!-- Editor -->
-    <script type="module">
-      import { Editor } from 'http://localhost:8080/dist/index.js';
-      
-      import Prism from 'prismjs';
-      
-      // method 1: import selected languages
-      import codeSyntaxHighlightPlugin from '/dist/index.js';
-      import 'prismjs/components/prism-clojure.js';
 
-      // method 2: import all languages
-      // import codeSyntaxHighlightPlugin from '/dist/indexAll.js';
+<head lang="en">
+  <meta charset="UTF-8" />
+  <title>Test to use plugin in node environment</title>
+  <!-- Plugin -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css" />
+</head>
 
-      const content = [
-        'js:',
-        '```js',
-        `console.log('foo')`,
-        '```',
-        '',
-        'javascript:',
-        '```javascript',
-        `console.log('bar')`,
-        '```',
-        '',
-        '```html',
-        '<div id="editor"><span>baz</span></div>',
-        '```',
-        '',
-        '```wrong',
-        '[1 2 3]',
-        '```',
-        '',
-        '```clojure',
-        '[1 2 3]',
-        '```',
-      ].join('\n');
+<body>
+  <button onclick="window.myFunction()">action</button>
+  <div id="editor"></div>
+  <!-- Editor -->
+  <script type="module">
+    import { Editor } from 'http://localhost:8080/dist/index.js';
 
-      const editor = new Editor({
-        el: document.querySelector('#editor'),
-        initialEditType: 'wysiwyg',
-        previewStyle: 'vertical',
-        height: '500px',
-        initialValue: content,
-        plugins: [[codeSyntaxHighlightPlugin, { highlighter: Prism }]],
-      });
+    import Prism from 'prismjs';
 
-      window.editor = editor;
-    </script>
-  </body>
+    // method 1: import selected languages
+    import codeSyntaxHighlightPlugin from '/dist/index.js';
+    import 'prismjs/components/prism-clojure.js';
+
+    // method 2: import all languages
+    // import codeSyntaxHighlightPlugin from '/dist/indexAll.js';
+
+    const content = [
+      '![image](https://uicdn.toast.com/toastui/img/tui-editor-bi.png)',
+      '',
+      "1. [x] React",
+      "2. [x] Vue",
+      "3. [ ] Ember",
+      "",
+      '# Awesome Editor!',
+      '',
+      'It has been _released as opensource in 2018_ and has ~~continually~~ evolved to **receive 10k GitHub ⭐️ Stars**.',
+      '',
+      '## Create Instance',
+      '',
+      'You can create an instance with the following code and use `getHtml()` and `getMarkdown()` of the [Editor](https://github.com/nhn/tui.editor).',
+      '',
+      '```js',
+      'const editor = new Editor(options);',
+      'if(editor) {',
+      '    console.log(editor);',
+      '}',
+      '```',
+      '',
+      '> See the table below for default options',
+      '> > More API information can be found in the document',
+      '',
+      '| name | type | description |',
+      '| --- | --- | --- |',
+      '| el | `HTMLElement` | container element |',
+      '',
+      '## Features',
+      '',
+      '* CommonMark + GFM Specifications',
+      '   * Live Preview',
+      '   * Scroll Sync',
+      '   * Auto Indent',
+      '   * Syntax Highlight',
+      '        1. Markdown',
+      '        2. Preview',
+      '',
+      '## Support Wrappers',
+      '',
+      '> * Wrappers',
+      '>    1. [x] React',
+      '>    2. [x] Vue',
+      '>    3. [ ] Ember',
+      '',
+      "| Objective: | Link Capacity 1 CS5 2 chpid/link 16 CPUs 8 ICFs |",
+      "| ---------- | ----------------------------------------------- |",
+      "| Thrasher Job: | WORKLOAD.ACME.SOFPDS(ACMALLA1) |",
+      "| Thrasher Rate: | /RUNWKLD 4 1 zA\_GA15\_ShrICF\_Sc1\_CS5\_DED\_R25L0243\_4ACMER1 ACMALLA1<br><br>/RUNWKLD 4 100 zA\_GA15\_ShrICF\_Sc1\_CS5\_DED\_R25L0243\_4ACMER100 ACMALLA1<br>/RUNWKLD 4 500 `zA\_GA15\_ShrICF\_Sc1\_CS5\_DED\_R25L0243\_4ACMER500 ACMALLA1` |"
+    ].join('\n');
+
+    const editor = new Editor({
+      el: document.querySelector('#editor'),
+      initialEditType: 'wysiwyg',
+      previewStyle: 'vertical',
+      height: '1000px',
+      initialValue: content,
+      plugins: [[codeSyntaxHighlightPlugin, { highlighter: Prism }]],
+    });
+
+    window.editor = editor;
+
+  </script>
+</body>
+
 </html>

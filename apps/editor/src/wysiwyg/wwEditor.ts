@@ -33,8 +33,6 @@ import { includes } from '@/utils/common';
 import { isInTableNode } from '@/wysiwyg/helper/node';
 import { changeCopied } from './clipboard/copy';
 import CellSelection from './plugins/selection/cellSelection';
-import { TextSelection } from 'prosemirror-state';
-import { pluginKey } from './plugins/selection/tableSelectionView';
 
 interface WindowWithClipboard extends Window {
   clipboardData?: DataTransfer | null;
@@ -172,14 +170,13 @@ export default class WysiwygEditor extends EditorBase {
         return false;
       },
       handleDOMEvents: {
-        copy: (view, ev) => {
+        copy: (view, _) => {
           /**
            * this function handle copied content, default return false(parsing DOM)
-           * If return true, will copy rendered html instead parsing DOM.
-           * If return false, will parse DOM instead of copy rendered html 
+           * If return true, will copy rendered html instead parsing DO
+           * If return false, will parse DOM instead of copy rendered html
            * When select table cells content (Selection is NOT CellSelection), must return true(raw)
            * Else must return true to let it escape a <table> wrapper
-           * 
            * Firefox doesn't support copy html with styles, always return false(parse DOM) to get styles
            * especially table
            * code-syntax-highlight will be a problem because it can not get style when parsing DOM
@@ -187,13 +184,15 @@ export default class WysiwygEditor extends EditorBase {
 
           const { state } = view;
           const isCellSelection = state.selection instanceof CellSelection;
-          const isInTable = isInTableNode(state.selection.$from)
+          // const isInTable = isInTableNode(state.selection.$from)
+          /* If user select content in table, return broswer rendered html  */
+          // if (isInTable && !isCellSelection) return true
 
-          if (isInTable && !isCellSelection) return true /* Exception: Firefox can not get styled cell content */
+          if (isCellSelection) return false;
 
-          return false
-
+          return true;
         },
+
         paste: (_, ev) => {
           const clipboardData =
             (ev as ClipboardEvent).clipboardData || (window as WindowWithClipboard).clipboardData;
