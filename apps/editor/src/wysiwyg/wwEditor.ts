@@ -192,8 +192,13 @@ export default class WysiwygEditor extends EditorBase {
 
           return true;
         },
+        cut:(_, ev)=>{
+          this.eventEmitter.emit('cut', this.editorType, ev);
+          return true
+        },
 
         paste: (_, ev) => {
+          this.eventEmitter.emit('paste', this.editorType, ev);
           const clipboardData =
             (ev as ClipboardEvent).clipboardData || (window as WindowWithClipboard).clipboardData;
           const items = clipboardData?.items;

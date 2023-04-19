@@ -4,6 +4,16 @@
 <head lang="en">
   <meta charset="UTF-8" />
   <title>Demo</title>
+  <style>
+    #my-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 19;
+      background-color: transparent;
+      border: 1px solid red;
+    }
+  </style>
   <script type="module">
     import { Editor } from '/dist/index.js';
 
@@ -59,6 +69,7 @@
 
     const codeBlock = "this is codeblock 1st line\n2nd line "
 
+    let highlight = false
     const editor = new Editor({
       el: document.querySelector('#editor'),
       previewStyle: 'vertical',
@@ -68,89 +79,68 @@
       extendedAutolinks: true,
       frontMatter: true,
       initialValue: content,
+      customHTMLRenderer: {
+        "emph": (node, context) => {
+          const { origin, entering } = context
+          const result = origin();
+          return {
+            type: entering ? 'openTag' : 'closeTag',
+            attributes: highlight ? { style: 'background-color:yellow' } : {},
+            tagName: 'em'
+          }
+        },
+        "link": (node, context) => {
+          const { origin, entering } = context;
+          const result = origin();
+          if (entering) {
+            result.attributes.target = '_blank';
+          }
+          return result;
+        },
+        "image": (node, context) => {
+          const { origin, entering } = context;
+          const result = origin();
+          if (entering) {
+            result.attributes.target = '_blank';
+          }
+          return result;
+        },
+      }
     });
+    window.editor = editor;
+    const propertyList = [
+    'color',
+    'background-color',
+    'font-family',
+    'font-size',
+    'font-weight',
+    'line-height',
+    'padding',
+    'margin',
+    'border-top',
+    'border-left',
+    'border-right',
+    'border-bottom',
+    'border-radius',
+    'border-collapse',
+];
 
-    /*
-    document.querySelector("#editor").addEventListener('copy', async (e) => {
-      const clipboardContents = await navigator.clipboard.read();
-      for (const item of clipboardContents) {
-        if (item.types.includes("text/html")) {
-          const blob = await item.getType('text/html');
-          const html = await blob.text();
-          const css = '.task-list-item {color:red;border: 0;list-style: none;padding-left: 24px;margin-left: -24px;}'
-          //const css = 'h1 {color:red}'
-
-          //let htmlBlob = new Blob([html], { type: 'text/html' });
-          //let cssBlob = new Blob([css], { type: 'text/css' });
-          setClipboard(css,'text/css')
-        }
+    document.querySelector('#editor').addEventListener('copy', (e) => {
+      const elements = document.querySelectorAll('.ProseMirror.toastui-editor-contents h1');
+      for (let i = 0; i < elements.length; i++) {
+        const element = elements[i];
+        const style = window.getComputedStyle(element);
+        const cssText = propertyList.map((property) => {
+          return `${property}: ${style.getPropertyValue(property)};`;
+        }).join(' ');
+        console.log(cssText)
+        element.setAttribute('style', cssText);
       }
     })
-    */
-    window.editor = editor;
-    window.myFunction = function () {
-      let selection = window.getSelection();
-      let elements = document.querySelectorAll("table,td,th,code,pre,h1,h2");
-      console.log(elements)
-      for (let i = 0; i < elements.length; i++) {
-        let computedStyles = window.getComputedStyle(elements[i]);
-
-        for (let j = 0; j < computedStyles.length; j++) {
-          let property = computedStyles[j];
-          let value = computedStyles.getPropertyValue(property);
-
-          elements[i].style[property] = value;
-        }
-      }
-
-      //const editorEl = document.querySelector(".ProseMirror.toastui-editor-contents")
-      // editorEl.focus();
-      // document.execCommand("selectAll");
-      // editorEl.focus();
-      let bool = document.execCommand("copy");
-
-
-      if (false) {
-        let editorCElementSelector = "";
-        let range = document.createRange();
-        editorCElementSelector = ".ProseMirror.toastui-editor-contents"
-        //editorCElementSelector = ".ww-mode"
-
-        const editorContentNode = document.querySelector(editorCElementSelector);
-        console.log("editorContentNode:", editorContentNode)
-        if (editorContentNode) {
-          //editorContentNode.insertBefore(runlogHTMLNode, editorContentNode.children[0]);
-
-          selection.removeAllRanges();
-          //console.log(selection)
-          range.selectNodeContents(editorContentNode);
-          // range.insertNode(runlogHTMLNode)
-          selection.addRange(range);
-          console.log("selection:", selection)
-          let bool = document.execCommand("copy");
-          document.execCommand("unselect");
-          // editorContentNode.parentNode?.removeChild(runlogHTMLNode);
-          if (bool) {
-            alert("Copied!");
-            //let myEvent = new Event("copy");
-            //document.dispatchEvent(myEvent);
-          }
-          else {
-            alert("Faile to copy!");
-          }
-        }
-        else {
-          alert(`Can not find editor Node: ${editorCElementSelector}`)
-        }
-      }
-    }
   </script>
 </head>
 
 <body>
-
-
-  <button onclick="window.myFunction()">action</button>
   <div id="editor"></div>
   <!-- Editor -->
 </body>
