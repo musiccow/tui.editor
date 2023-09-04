@@ -4,6 +4,7 @@
 <head lang="en">
   <meta charset="UTF-8" />
   <title>Demo</title>
+  <link rel="stylesheet" href="./index.css" />
   <style>
     #my-canvas {
       position: absolute;
@@ -19,52 +20,58 @@
 
 
     const content = [
-      '![image](https://uicdn.toast.com/toastui/img/tui-editor-bi.png)',
+      '<details>',
+      '<summary>Header-Like Text</summary>',
       '',
-      "1. [x] React",
-      "2. [x] Vue",
-      "3. [ ] Ember",
-      "",
-      '# Awesome Editor!',
-      '',
-      'It has been _released as opensource in 2018_ and has ~~continually~~ evolved to **receive 10k GitHub ⭐️ Stars**.',
-      '',
-      '## Create Instance',
-      '',
-      'You can create an instance with the following code and use `getHtml()` and `getMarkdown()` of the [Editor](https://github.com/nhn/tui.editor).',
-      '',
-      '```js',
-      'const editor = new Editor(options);',
-      '```',
-      '',
-      '> See the table below for default options',
-      '> > More API information can be found in the document',
-      '',
-      '| name | type | description |',
-      '| --- | --- | --- |',
-      '| el | `HTMLElement` | container element |',
-      '',
-      '## Features',
-      '',
-      '* CommonMark + GFM Specifications',
-      '   * Live Preview',
-      '   * Scroll Sync',
-      '   * Auto Indent',
-      '   * Syntax Highlight',
-      '        1. Markdown',
-      '        2. Preview',
-      '',
-      '## Support Wrappers',
-      '',
-      '> * Wrappers',
-      '>    1. [x] React',
-      '>    2. [x] Vue',
-      '>    3. [ ] Ember',
-      '',
-      "| Objective: | Link Capacity 1 CS5 2 chpid/link 16 CPUs 8 ICFs |",
-      "| ---------- | ----------------------------------------------- |",
-      "| Thrasher Job: | WORKLOAD.ACME.SOFPDS(ACMALLA1) |",
-      "| Thrasher Rate: | /RUNWKLD 4 1 zA\_GA15\_ShrICF\_Sc1\_CS5\_DED\_R25L0243\_4ACMER1 ACMALLA1<br><br>/RUNWKLD 4 100 zA\_GA15\_ShrICF\_Sc1\_CS5\_DED\_R25L0243\_4ACMER100 ACMALLA1<br>/RUNWKLD 4 500 `zA\_GA15\_ShrICF\_Sc1\_CS5\_DED\_R25L0243\_4ACMER500 ACMALLA1` |"
+      '# More context about this section',
+      '</details>',
+      // '',
+      // '![image](https://uicdn.toast.com/toastui/img/tui-editor-bi.png)',
+      // '',
+      // "1. [x] React",
+      // "2. [x] Vue",
+      // "3. [ ] Ember",
+      // "",
+      // '# Awesome Editor!',
+      // '',
+      // 'It has been _released as opensource in 2018_ and has ~~continually~~ evolved to **receive 10k GitHub ⭐️ Stars**.',
+      //   '',
+      //   '## Create Instance',
+      //   '',
+      //   'You can create an instance with the following code and use `getHtml()` and `getMarkdown()` of the [Editor](https://github.com/nhn/tui.editor).',
+      //   '',
+      //   '```js',
+      //   'const editor = new Editor(options);',
+      //   '```',
+      //   '',
+      //   '> See the table below for default options',
+      //   '> > More API information can be found in the document',
+      //   '',
+      //   '| name | type | description |',
+      //   '| --- | --- | --- |',
+      //   '| el | `HTMLElement` | container element |',
+      //   '',
+      //   '## Features',
+      //   '',
+      //   '* CommonMark + GFM Specifications',
+      //   '   * Live Preview',
+      //   '   * Scroll Sync',
+      //   '   * Auto Indent',
+      //   '   * Syntax Highlight',
+      //   '        1. Markdown',
+      //   '        2. Preview',
+      //   '',
+      //   '## Support Wrappers',
+      //   '',
+      //   '> * Wrappers',
+      //   '>    1. [x] React',
+      //   '>    2. [x] Vue',
+      //   '>    3. [ ] Ember',
+      //   '',
+      //   "| Objective: | Link Capacity 1 CS5 2 chpid/link 16 CPUs 8 ICFs |",
+      //   "| ---------- | ----------------------------------------------- |",
+      //   "| Thrasher Job: | WORKLOAD.ACME.SOFPDS(ACMALLA1) |",
+      //   "| Thrasher Rate: | /RUNWKLD 4 1 zA\_GA15\_ShrICF\_Sc1\_CS5\_DED\_R25L0243\_4ACMER1 ACMALLA1<br><br>/RUNWKLD 4 100 zA\_GA15\_ShrICF\_Sc1\_CS5\_DED\_R25L0243\_4ACMER100 ACMALLA1<br>/RUNWKLD 4 500 `zA\_GA15\_ShrICF\_Sc1\_CS5\_DED\_R25L0243\_4ACMER500 ACMALLA1` |"
     ].join('\n');
 
     const codeBlock = "this is codeblock 1st line\n2nd line "
@@ -74,7 +81,7 @@
       el: document.querySelector('#editor'),
       previewStyle: 'vertical',
       height: '800px',
-      initialEditType: 'wysiwyg',
+      initialEditType: 'markdown',
       useCommandShortcut: true,
       extendedAutolinks: true,
       frontMatter: true,
@@ -105,25 +112,100 @@
           }
           return result;
         },
+        htmlBlock: {
+          // details(node, context) {
+          //   return { type: 'html', content: node.literal }
+          // },
+          // details(node, context) {
+          //   return [
+          //   { type: 'openTag', tagName: 'details', outerNewLine: true},
+          //   { type: 'html', content: node.childrenHTML},
+          //   { type: 'closeTag', tagName: 'details', outerNewLine: true },
+          //   ]
+          // },
+          // summary(node, context) {
+          //   return { type: 'html', content: node.literal }
+          // },
+          // summary(node, context) {
+          //   return [
+          //     { type: 'openTag', tagName: 'summary', outerNewLine: true },
+          //     { type: 'html', content: node.childrenHTML },
+          //     { type: 'closeTag', tagName: 'summary', outerNewLine: true },
+          //   ];
+          // }
+
+          details(node, context) {
+            const { entering } = context
+            console.log("context:\n", context)
+            if (entering) {
+              return [
+                { type: 'openTag', tagName: 'details', outerNewLine: true },
+                { type: 'html', content: node.childrenHTML },
+                // { type: 'closeTag', tagName: 'details', outerNewLine: true },
+              ]
+            }
+            else {
+              return [
+                { type: 'closeTag', tagName: 'details', outerNewLine: true },
+              ]
+            }
+          },
+          // details(node, context) {
+          //   return [
+          //   { type: 'openTag', tagName: 'details', outerNewLine: true},
+          //   { type: 'html', content: node.childrenHTML},
+          //   { type: 'closeTag', tagName: 'details', outerNewLine: true },
+          //   ]
+          // },
+
+          
+          // summary(node, context) {
+          //   return [
+          //     { type: 'openTag', tagName: 'summary', outerNewLine: true, attributes: node.attrs },
+          //     { type: 'html', content: node.childrenHTML },
+          //     { type: 'closeTag', tagName: 'summary', outerNewLine: true },
+          //   ];
+          // }
+        },
+        htmlInline: {
+          // details(node, context) {
+          //   console.log("node\n",node)
+          //   console.log("context\n",context)
+          //   return [
+          //   { type: 'openTag', tagName: 'details', outerNewLine: true},
+          //   { type: 'html', content: node.childrenHTML},
+          //   { type: 'closeTag', tagName: 'details', outerNewLine: true },
+          //   ]
+          // },
+          // summary(node, context) {
+          //   return [
+          //     { type: 'openTag', tagName: 'summary', outerNewLine: true },
+          //     { type: 'html', content: node.childrenHTML },
+          //     { type: 'closeTag', tagName: 'summary', outerNewLine: true },
+          //   ];
+          // }
+        },
+
+
       }
     });
     window.editor = editor;
     const propertyList = [
-    'color',
-    'background-color',
-    'font-family',
-    'font-size',
-    'font-weight',
-    'line-height',
-    'padding',
-    'margin',
-    'border-top',
-    'border-left',
-    'border-right',
-    'border-bottom',
-    'border-radius',
-    'border-collapse',
-];
+      'color',
+      'background-color',
+      'font-family',
+      'font-size',
+      'font-weight',
+      'line-height',
+      'padding',
+      'margin',
+      'border-top',
+      'border-left',
+      'border-right',
+      'border-bottom',
+      'border-radius',
+      'border-collapse',
+    ];
 
     document.querySelector('#editor').addEventListener('copy', (e) => {
       const elements = document.querySelectorAll('.ProseMirror.toastui-editor-contents h1');

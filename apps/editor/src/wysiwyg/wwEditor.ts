@@ -31,8 +31,7 @@ import { widgetNodeView } from '@/widget/widgetNode';
 import { cls, removeProseMirrorHackNodes } from '@/utils/dom';
 import { includes } from '@/utils/common';
 import { isInTableNode } from '@/wysiwyg/helper/node';
-import { changeCopied } from './clipboard/copy';
-import CellSelection from './plugins/selection/cellSelection';
+
 
 interface WindowWithClipboard extends Window {
   clipboardData?: DataTransfer | null;
@@ -160,7 +159,7 @@ export default class WysiwygEditor extends EditorBase {
         this.emitChangeEvent(tr.scrollIntoView());
         this.eventEmitter.emit('setFocusedNode', state.selection.$from.node(1));
       },
-      clipboardSerializer: changeCopied(this.schema),
+      // clipboardSerializer: changeCopied(this.schema),
       transformPastedHTML: changePastedHTML,
       transformPasted: (slice: Slice) =>
         changePastedSlice(slice, this.schema, isInTableNode(this.view.state.selection.$from)),
@@ -170,32 +169,6 @@ export default class WysiwygEditor extends EditorBase {
         return false;
       },
       handleDOMEvents: {
-        copy: (view, _) => {
-          /**
-           * this function handle copied content, default return false(parsing DOM)
-           * If return true, will copy rendered html instead parsing DO
-           * If return false, will parse DOM instead of copy rendered html
-           * When select table cells content (Selection is NOT CellSelection), must return true(raw)
-           * Else must return true to let it escape a <table> wrapper
-           * Firefox doesn't support copy html with styles, always return false(parse DOM) to get styles
-           * especially table
-           * code-syntax-highlight will be a problem because it can not get style when parsing DOM
-           */
-
-          const { state } = view;
-          const isCellSelection = state.selection instanceof CellSelection;
-          // const isInTable = isInTableNode(state.selection.$from)
-          /* If user select content in table, return broswer rendered html  */
-          // if (isInTable && !isCellSelection) return true
-
-          if (isCellSelection) return false;
-
-          return true;
-        },
-        cut:(_, ev)=>{
-          this.eventEmitter.emit('cut', this.editorType, ev);
-          return true
-        },
 
         paste: (_, ev) => {
           this.eventEmitter.emit('paste', this.editorType, ev);

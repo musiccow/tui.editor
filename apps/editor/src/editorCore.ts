@@ -520,6 +520,15 @@ class ToastUIEditorCore {
     return html;
   }
 
+    /**
+   * Get Editor Core 
+   * @returns {ToastUIEditorCore} 
+   */
+    getEditorCore() {
+      return this;
+    }
+
+
   /**
    * Get Editor View 
    * @returns {EditorView} 

@@ -1,12 +1,13 @@
 import ColorPicker from 'tui-color-picker';
 import type { Context } from '@toast-ui/toastmark';
-import type { PluginContext, PluginInfo, HTMLMdNode, I18n } from '@toast-ui/editor';
+import type { PluginContext, PluginInfo, MdLikeNode, I18n } from '@toast-ui/editor';
 import type { Transaction, Selection, TextSelection } from 'prosemirror-state';
 import { PluginOptions } from '@t/index';
 import { addLangs } from './i18n/langs';
 
 import './css/plugin.css';
-import { findParentByClassName } from './utils/dom';
+import { findParentByClassName, inlineStyleToObject, isMicrosoftOfficeStyle, isBlackOrWhite } from './utils/dom';
+import { NodeInfo, ToMdConvertorContext } from '@toast-ui/editor/types/convertor';
 
 const PREFIX = 'toastui-editor-';
 
@@ -157,11 +158,61 @@ export default function colorSyntaxPlugin(
     ],
     toHTMLRenderers: {
       htmlInline: {
-        span(node: HTMLMdNode, { entering }: Context) {
-          return entering
-            ? { type: 'openTag', tagName: 'span', attributes: node.attrs! }
-            : { type: 'closeTag', tagName: 'span' };
+        span(node: MdLikeNode, { entering }: Context) {
+          if (entering) {
+            try {
+              const styleObject = inlineStyleToObject(node.attrs!.style as string);
+              
+              if (
+                isMicrosoftOfficeStyle(styleObject) ||
+                !styleObject.color ||
+                isBlackOrWhite(styleObject.color)
+              ) {
+                return { type: 'openTag', tagName: 'span' };
+              }
+              return {
+                type: 'openTag',
+                tagName: 'span',
+                attributes: { ...node.attrs!, style: `color: ${styleObject.color}` },
+              };
+            } catch (e) {
+              return { type: 'openTag', tagName: 'span' };
+            }
+          } else {
+            return { type: 'closeTag', tagName: 'span' };
+          }
+          // return entering
+          //   ? { type: 'openTag', tagName: 'span', attributes: node.attrs! }
+          //   : { type: 'closeTag', tagName: 'span' };
         },
+      },
+    },
+    toMarkdownRenderers: {
+      html({ node }: NodeInfo, { entering, origin }: ToMdConvertorContext) {
+        const result = origin!();
+
+        try {
+          if (node.type.name === 'span') {
+            const styleObject = inlineStyleToObject(node.attrs!.htmlAttrs.style as string);
+
+            if (
+              isMicrosoftOfficeStyle(styleObject) ||
+              !styleObject.color ||
+              isBlackOrWhite(styleObject.color)
+            ) {
+              return { delim: '' }; // return empty tags if it's Microsoft Office style or black/white color or no color property
+            }
+
+            return entering
+              ? { rawHTML: `<span style="color: ${styleObject.color}">` }
+              : { rawHTML: '</span>' };
+          }
+
+          // other tags except span tag return original result
+          return result;
+        } catch (e) {
+          return { delim: '' }; // return empty tags if error occurs
+        }
       },
     },
   };
