@@ -7,7 +7,8 @@ import { LinkAttributeNames, LinkAttributes } from '@t/editor';
 
 export const isMac = /Mac/.test(navigator.platform);
 const reSpaceMoreThanOne = /[\u0020]+/g;
-const reEscapeChars = /[>(){}[\]+-.!#|]/g;
+// const reEscapeChars = /[>(){}[\]+-.!#|]/g;
+const reEscapeChars = /[>(){}[\]+-.!#|=]/g;
 const reEscapeHTML = /<([a-zA-Z_][a-zA-Z0-9\-._]*)(\s|[^\\>])*\/?>|<(\/)([a-zA-Z_][a-zA-Z0-9\-._]*)\s*\/?>|<!--[^-]+-->|<([a-zA-Z_][a-zA-Z0-9\-.:/]*)>/g;
 const reEscapeBackSlash = /\\[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~\\]/g;
 const reEscapePairedChars = /[*_~`]/g;
@@ -53,7 +54,8 @@ const reMarkdownTextToEscapeMap = {
   codeblock: /(^ {4}[^\n]+\n*)+/,
   thematicBreak: /^ *((\* *){3,}|(- *){3,} *|(_ *){3,}) */,
   atxHeading: /^(#{1,6}) +[\s\S]+/,
-  seTextheading: /^([^\n]+)\n *(=|-){2,} */,
+  // seTextheading: /^([^\n]+)\n *(=|-){2,} */,
+  seTextheading: /^\s{0,}(={1,})\s{0,}$/,
   blockquote: /^( *>[^\n]+.*)+/,
   list: /^ *(\*+|-+|\d+\.) [\s\S]+/,
   def: /^ *\[([^\]]+)\]: *<?([^\s>]+)>?(?: +["(]([^\n]+)[")])? */,
