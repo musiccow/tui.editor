@@ -67,7 +67,12 @@ export default class CellSelection extends Selection {
     const startCell = doc.resolve(mapping.map(startPos));
     const endCell = doc.resolve(mapping.map(endPos));
     const map = TableOffsetMap.create(startCell)!;
-
+    
+    // text selection when map is null
+    if (map === null) {
+      return TextSelection.create(doc, endCell.pos);
+    }
+    
     // text selection when rows or columns are deleted
     if (
       this.offsetMap.totalColumnCount > map.totalColumnCount ||
