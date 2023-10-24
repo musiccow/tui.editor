@@ -136,17 +136,15 @@ export default function colorSyntaxPlugin(
     },
     wysiwygCommands: {
       color: ({ selectedColor }, { tr, selection, schema }, dispatch) => {
-        if (selectedColor) {
-          const { from, to } = selection;
-          const attrs = { htmlAttrs: { style: `color: ${selectedColor}` } };
-          const mark = schema.marks.span.create(attrs);
+        const { from, to } = selection;
+        const attrs = { htmlAttrs: { style: `color: ${selectedColor}` } };
+        const mark = schema.marks.span.create(attrs);
 
-          tr.addMark(from, to, mark);
-          dispatch!(tr);
+        tr.addMark(from, to, mark);
 
-          return true;
-        }
-        return false;
+        dispatch!(tr);
+
+        return true;
       },
     },
     toolbarItems: [

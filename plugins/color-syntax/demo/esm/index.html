@@ -18,12 +18,18 @@
       import { Editor } from 'http://localhost:8080/dist/index.js';
       import colorPickerPlugin from '/dist/index.js';
 
+      const colorSyntaxOptions = {
+        preset: [
+            '#FF0000','#00FF00','#0000FF',undefined
+        ]
+      };
+    
       const editor = new Editor({
         el: document.querySelector('#editor'),
         previewStyle: 'vertical',
         height: '500px',
         initialValue: 'Select some text and choose a color from the toolbar.',
-        plugins: [colorPickerPlugin]
+        plugins: [[colorPickerPlugin, colorSyntaxOptions]]
       });
       window.editor = editor;
     </script>

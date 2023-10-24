@@ -22,13 +22,19 @@
       const { Editor } = toastui;
       const { colorSyntax } = Editor.plugin;
 
+      const colorSyntaxOptions = {
+        preset: [
+            '#FF0','0FF','F0F'
+        ]
+    };
+
       const editor = new Editor({
         el: document.querySelector('#editor'),
         previewStyle: 'vertical',
-        height: '500px',
+        height: '800px',
         initialEditType: 'wysiwyg',
-        initialValue: 'Select some text and choose a color from the toolbar.',
-        plugins: [colorSyntax]
+        initialValue: 'Select some text and choose a color from the .',
+        plugins: [colorSyntax,colorSyntaxOptions]
       });
     </script>
   </body>
