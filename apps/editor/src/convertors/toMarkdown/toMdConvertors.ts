@@ -226,9 +226,9 @@ export const toMdConvertors: ToMdConvertorMap = {
     const { rawHTML } = node.attrs;
     let delim = '*';
 
-    if (!betweenSpace) {
-      delim = entering ? '<em>' : '</em>';
-    }
+    // if (!betweenSpace) {
+    //   delim = entering ? '<em>' : '</em>';
+    // }
 
     return {
       delim,
@@ -240,9 +240,9 @@ export const toMdConvertors: ToMdConvertorMap = {
     const { rawHTML } = node.attrs;
     let delim = '~~';
 
-    if (!betweenSpace) {
-      delim = entering ? '<del>' : '</del>';
-    }
+    // if (!betweenSpace) {
+    //   delim = entering ? '<del>' : '</del>';
+    // }
 
     return {
       delim,
