@@ -34,7 +34,7 @@ function isSoftbreak(mdNode: MdNode | null) {
   return mdNode?.type === 'softbreak';
 }
 
-function isListNode({ type, literal }: MdNode) {
+export function isListNode({ type, literal }: MdNode) {
   const matched = type === 'htmlInline' && literal!.match(reHTMLTag);
 
   if (matched) {

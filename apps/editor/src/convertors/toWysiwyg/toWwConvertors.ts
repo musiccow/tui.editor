@@ -21,6 +21,7 @@ import {
   getTextWithoutTrailingNewline,
   isInlineNode,
   isCustomHTMLInlineNode,
+  isListNode,
 } from './htmlToWwConvertors';
 
 import { ToWwConvertorMap } from '@t/convertor';
@@ -252,11 +253,23 @@ const toWwConvertors: ToWwConvertorMap = {
 
         state.openNode(cell, attrs);
 
-        if (hasParaNode(node.firstChild)) {
+        // if (hasParaNode(node.firstChild)) {
+        //   state.openNode(paragraph);
+        // }
+
+        // if first child is not list node, open paragraph node
+        if (node.firstChild && !isListNode(node.firstChild)) {
           state.openNode(paragraph);
         }
+
+
       } else {
-        if (hasParaNode(node.lastChild)) {
+        // if (hasParaNode(node.lastChild)) {
+        //   state.closeNode();
+        // }
+
+        // if last child is not list node, close paragraph node
+        if (node.lastChild && !isListNode(node.lastChild)) {
           state.closeNode();
         }
         state.closeNode();
