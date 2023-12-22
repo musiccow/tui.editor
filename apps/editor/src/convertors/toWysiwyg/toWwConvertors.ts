@@ -257,8 +257,8 @@ const toWwConvertors: ToWwConvertorMap = {
         //   state.openNode(paragraph);
         // }
 
-        // if first child is not list node, open paragraph node
-        if (node.firstChild && !isListNode(node.firstChild)) {
+        if (node.firstChild && !isListNode(node.firstChild) && !isBRTag(node.firstChild)) {
+          // In htmlToWwConvertors, it handles the case that the first child is list node and br tag. I don't know the reason.
           state.openNode(paragraph);
         }
 
@@ -268,8 +268,8 @@ const toWwConvertors: ToWwConvertorMap = {
         //   state.closeNode();
         // }
 
-        // if last child is not list node, close paragraph node
-        if (node.lastChild && !isListNode(node.lastChild)) {
+        if (node.lastChild && !isListNode(node.lastChild) && !isBRTag(node.lastChild)) {
+          // In htmlToWwConvertors, it handles the case that the first child is list node and br tag. I don't know the reason.
           state.closeNode();
         }
         state.closeNode();
