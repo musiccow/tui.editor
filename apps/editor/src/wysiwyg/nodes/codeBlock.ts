@@ -33,7 +33,7 @@ export class CodeBlock extends NodeSchema {
           getAttrs(dom: Node | string) {
             const rawHTML = (dom as HTMLElement).getAttribute('data-raw-html');
             const child = (dom as HTMLElement).firstElementChild;
-            
+
             return {
               language: child?.getAttribute('data-language') || null,
               ...(rawHTML && { rawHTML }),
@@ -54,21 +54,56 @@ export class CodeBlock extends NodeSchema {
   commands(): EditorCommand {
     return () => (state, dispatch) => {
       const { selection, schema, tr } = state;
-      const { from, to } = getRangeInfo(selection);
+      const { from, to, startFromOffset, endToOffset } = getRangeInfo(selection);
+      const rangeInfo = getRangeInfo(selection);
 
-      if (from !== to) {
-        const fragments = selection.content().content;
+      let nodeType;
 
-        const insertedText = fragments.content.map((node: Node) => node.textContent).join("\n");
-        const fencedNode = createTextNode(schema, insertedText);
+      if (selection.$from.parent.type.name === 'codeBlock' && selection.$to.parent.type.name === 'codeBlock' && selection.content().content.content.length <= 1) { // selection is inside code block
+        const codeBlock = selection.$from.parent;
+        // search  backward from 'from' for the first occurence of \n in  codeBlockText
+        let start = from;
+        let end = to;
 
-        tr.replaceSelectionWith(fencedNode);
-        tr.setSelection(createTextSelection(tr, from, from + insertedText.length + 1));
-        dispatch!(tr);
-        state = state.apply(tr);
+        while (start > startFromOffset && codeBlock.textBetween(start - startFromOffset - 1, start - startFromOffset) !== '\n') {
+          start-=1;
+        }
+        // search forward from 'to' for the first occurence of \n in  codeBlockText
+        while (end < endToOffset && codeBlock.textBetween(end - startFromOffset, end - startFromOffset + 1) !== '\n') {
+          end+=1;
+        }
+
+        tr.delete(start-1, end+1); // delete the selected text
+
+        if (start !== startFromOffset && end !== endToOffset) {
+          tr.split(start-1);
+        }
+
+        codeBlock.textBetween(start - startFromOffset, end - startFromOffset).split('\n').reverse().forEach((line) => {
+          if (line !== '') {
+            tr.insert(start-1, schema.nodes.paragraph.create({}, schema.text(line)));
+          }
+        });
+        tr.setSelection(createTextSelection(tr, start-1, end+1)); // set the cursor to the start of the deleted text
+ 
       }
 
-      return setBlockType(state.schema.nodes.codeBlock)(state, dispatch);
+      else {
+        nodeType = schema.nodes.codeBlock;
+        if (from !== to) {
+          const fragments = selection.content().content;
+          const insertedText = fragments.content.map((node: Node) => node.textContent).join('\n');
+          const fencedNode = createTextNode(schema, insertedText);
+
+          tr.replaceSelectionWith(fencedNode);
+          tr.setSelection(createTextSelection(tr, from, from + insertedText.length + 1));
+        }
+      }
+
+      dispatch!(tr);
+      state = state.apply(tr);
+      // nodeType = schema.nodes.codeBlock;
+      return setBlockType(nodeType)(state, dispatch);
     };
   }
 

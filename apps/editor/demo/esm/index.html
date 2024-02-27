@@ -20,6 +20,19 @@
 
 
     const content = [
+      '# Hello',
+      '```',
+      '12345',
+      '67890',
+      'abcde',
+      '0000',
+      '```',
+      '```',
+      'ABCD',
+      'EFDH',
+      'IJKLMN',
+      'aaaa',
+      '```'
       //'<details>',
       //'<summary>Header-Like Text</summary>',
       //'',
@@ -81,7 +94,7 @@
       el: document.querySelector('#editor'),
       previewStyle: 'vertical',
       height: '800px',
-      initialEditType: 'markdown',
+      initialEditType: 'wysiwyg',
       useCommandShortcut: true,
       extendedAutolinks: true,
       frontMatter: true,
