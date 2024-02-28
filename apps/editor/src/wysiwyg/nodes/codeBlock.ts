@@ -66,35 +66,45 @@ export class CodeBlock extends NodeSchema {
         let end = to;
 
         while (start > startFromOffset && codeBlock.textBetween(start - startFromOffset - 1, start - startFromOffset) !== '\n') {
-          start-=1;
+          start -= 1;
         }
         // search forward from 'to' for the first occurence of \n in  codeBlockText
         while (end < endToOffset && codeBlock.textBetween(end - startFromOffset, end - startFromOffset + 1) !== '\n') {
-          end+=1;
+          end += 1;
         }
 
-        tr.delete(start-1, end+1); // delete the selected text
+        tr.delete(start - 1, end + 1); // delete the selected text
 
         if (start !== startFromOffset && end !== endToOffset) {
-          tr.split(start-1);
+          tr.split(start - 1);
         }
 
+        let lines = 0;
         codeBlock.textBetween(start - startFromOffset, end - startFromOffset).split('\n').reverse().forEach((line) => {
           if (line !== '') {
-            tr.insert(start-1, schema.nodes.paragraph.create({}, schema.text(line)));
+            lines += 1;
+            tr.insert(start - 1, schema.nodes.paragraph.create({}, schema.text(line)));
           }
         });
-        tr.setSelection(createTextSelection(tr, start-1, end+1)); // set the cursor to the start of the deleted text
- 
+        tr.setSelection(createTextSelection(tr, start, end + lines)); // set the cursor to the start of the deleted text
+
       }
 
       else {
         nodeType = schema.nodes.codeBlock;
         if (from !== to) {
           const fragments = selection.content().content;
-          const insertedText = fragments.content.map((node: Node) => node.textContent).join('\n');
+          const insertedText = fragments.content.map((node: ProsemirrorNode) => {
+            
+            if (node.type.name === 'orderedList' || node.type.name === 'bulletList' || node.name === 'listItem') {
+              const childNodes: Node[] = node.content.content;
+              return childNodes.map((childNode: Node) => childNode.textContent).join('\n');
+            }
+            else {
+              return node.textContent;
+            }
+          }).join('\n');
           const fencedNode = createTextNode(schema, insertedText);
-
           tr.replaceSelectionWith(fencedNode);
           tr.setSelection(createTextSelection(tr, from, from + insertedText.length + 1));
         }
@@ -102,7 +112,6 @@ export class CodeBlock extends NodeSchema {
 
       dispatch!(tr);
       state = state.apply(tr);
-      // nodeType = schema.nodes.codeBlock;
       return setBlockType(nodeType)(state, dispatch);
     };
   }
