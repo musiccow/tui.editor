@@ -80,6 +80,7 @@ export class CodeBlock extends NodeSchema {
         }
 
         let lines = 0;
+
         codeBlock.textBetween(start - startFromOffset, end - startFromOffset).split('\n').reverse().forEach((line) => {
           if (line !== '') {
             lines += 1;
@@ -95,16 +96,20 @@ export class CodeBlock extends NodeSchema {
         if (from !== to) {
           const fragments = selection.content().content;
           const insertedText = fragments.content.map((node: ProsemirrorNode) => {
+            let text='';
             
             if (node.type.name === 'orderedList' || node.type.name === 'bulletList' || node.name === 'listItem') {
               const childNodes: Node[] = node.content.content;
-              return childNodes.map((childNode: Node) => childNode.textContent).join('\n');
+              
+              text = childNodes.map((childNode: Node) => childNode.textContent).join('\n');
             }
             else {
-              return node.textContent;
+              text = node.textContent;
             }
+            return text;
           }).join('\n');
           const fencedNode = createTextNode(schema, insertedText);
+
           tr.replaceSelectionWith(fencedNode);
           tr.setSelection(createTextSelection(tr, from, from + insertedText.length + 1));
         }
